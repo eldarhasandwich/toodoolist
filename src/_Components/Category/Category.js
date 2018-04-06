@@ -28,6 +28,20 @@ class Category extends Component {
         return this.props.userSession.userList._CATEGORIES[this.props.categoryID].categoryName
     }
 
+    getCompletedItemCount = () => {
+        let items = this.props.userSession.userList._CATEGORIES[this.props.categoryID]._ITEMS
+        if (items === undefined || items === null) {
+            return "Nothing!"
+        }
+
+        let completedItems = Object.keys(items).filter(
+            x => items[x].isComplete
+        ).length
+
+        let totalItems = Object.keys(items).length
+        return `(${completedItems}/${totalItems})`
+    }
+
     getCategoryItems = () => {
         if (!this.props.userSession.userList._CATEGORIES[this.props.categoryID].isOpen) {
             return
@@ -91,8 +105,10 @@ class Category extends Component {
                         />
                     </div>
 
-                    <h3 style={{marginBottom: "3px", marginTop: "0"}}>{this.getCategoryName()}</h3>
-                    {/* <button onClick={this.createNewItem}>Create new Item</button> */}
+                    <h3 style={{marginBottom: "3px", marginTop: "0"}}>
+                        {this.getCategoryName() + " - " + this.getCompletedItemCount()}
+                    </h3>
+
 
                     <div style={{width:"100%", overflow:"auto"}}>
                         <RaisedButton

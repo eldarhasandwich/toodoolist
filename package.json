@@ -1,4 +1,5 @@
 {
+  "homepage": "http://eldarhasandwich.github.io/toodoolist",
   "name": "toodoolist",
   "version": "0.1.0",
   "private": true,
@@ -15,7 +16,6 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0"
   },
-  "homepage": "http://eldarhasandwich.github.io/toodoolist",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -23,5 +23,8 @@
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
+  },
+  "devDependencies": {
+    "gh-pages": "^1.1.0"
   }
 }
