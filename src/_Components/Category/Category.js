@@ -12,7 +12,8 @@ class Category extends Component {
 
         this.state = {
             newItemDialogOpen: false,
-            newItemName: ""
+            newItemName: "",
+            categoryItemsVisible: false
         }
     }
 
@@ -43,7 +44,7 @@ class Category extends Component {
     }
 
     getCategoryItems = () => {
-        if (!this.props.userSession.userList._CATEGORIES[this.props.categoryID].isOpen) {
+        if (!this.state.categoryItemsVisible) {
             return
         }
 
@@ -79,7 +80,8 @@ class Category extends Component {
     updateCategoryIsOpen = (event, isChecked) => {
         // console.log(isChecked)
 
-        this.props.updateCategoryIsOpen(this.props.categoryID, isChecked)
+        // this.props.updateCategoryIsOpen(this.props.categoryID, isChecked)
+        this.setState({categoryItemsVisible: isChecked})
     }
 
     categoryStyle = {
@@ -100,7 +102,7 @@ class Category extends Component {
                         <Checkbox
                             label={"Show Items"}
                             style={{textAlign: "left"}}
-                            checked={this.props.userSession.userList._CATEGORIES[this.props.categoryID].isOpen}
+                            checked={this.state.categoryItemsVisible}
                             onCheck={this.updateCategoryIsOpen}
                         />
                     </div>
@@ -114,7 +116,7 @@ class Category extends Component {
                         <RaisedButton
                             style={{float: "right", marginRight: "10px", marginBottom: "5px"}}
                             label={"New Item"}
-                            disabled={!this.props.userSession.userList._CATEGORIES[this.props.categoryID].isOpen}
+                            disabled={!this.state.categoryItemsVisible}
                             secondary
                             onClick={this.openDialog}
                         />
@@ -157,7 +159,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         createNewItem: (categoryID, itemName) => dispatch(UserSessionActions.createNewItem(categoryID, itemName)),
-        updateCategoryIsOpen: (categoryID, boolean) => dispatch(UserSessionActions.updateCategoryIsOpen(categoryID, boolean))
     }
 }
 

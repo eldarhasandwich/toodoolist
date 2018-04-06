@@ -3,9 +3,25 @@ import {connect} from 'react-redux'
 
 import * as UserSessionActions from './../../Actions/userSession'
 
-import { Paper } from 'material-ui'
+import { Paper, Dialog, RaisedButton } from 'material-ui'
 
 class Item extends Component {
+
+    constructor(props){
+        super(props)
+
+        this.state = {
+            untickAlertOpen: false
+        }
+    }
+
+    openAlert = () => {
+        this.setState({untickAlertOpen: true})
+    }
+
+    closeAlert = () => {
+        this.setState({untickAlertOpen: false})
+    }
 
     getItemName = () => {
         return this.props.userSession.userList._CATEGORIES[this.props.categoryID]._ITEMS[this.props.itemID].itemName
@@ -24,16 +40,40 @@ class Item extends Component {
     }
 
     handleClick = () => {
-        // console.log("itemClicked")
+        if (this.props.userSession.userList._CATEGORIES[this.props.categoryID]._ITEMS[this.props.itemID].isComplete) {
+            this.openAlert()
+            return
+        }
 
+        this.updateItemIsComplete()
+    }
+    
+    updateItemIsComplete = () => {        
         this.props.updateItemIsComplete(
             this.props.categoryID,
             this.props.itemID,
             !this.props.userSession.userList._CATEGORIES[this.props.categoryID]._ITEMS[this.props.itemID].isComplete
         )
+        this.closeAlert()
     }
 
     render() {
+
+        const alertActions = [
+            <RaisedButton
+                primary
+                label={"Cancel"}
+                onClick={this.closeAlert}
+            />,
+            <RaisedButton
+                style={{marginLeft: "5px"}}
+                primary
+                label={"Confirm"}
+                onClick={this.updateItemIsComplete}
+            />            
+        ]
+
+
         return (
             <Paper style={this.itemStyle} zDepth={2}>
                 <div onClick={this.handleClick}>
@@ -41,7 +81,13 @@ class Item extends Component {
                         {this.getItemName()}
                     </p>
 
-
+                    <Dialog
+                        actions={alertActions}
+                        open={this.state.untickAlertOpen}
+                        onRequestClose={this.closeAlert}
+                    >
+                        {`'${this.getItemName()}' is marked as complete, would you like to set it as incomplete?`}
+                    </Dialog>
                 </div>
             </Paper>
         );

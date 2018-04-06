@@ -15,6 +15,8 @@ export function setUserList (newUserList) {
     }
 }
 
+
+
 export function getUserList (userID) {
     return (dispatch, getState) => {
 
@@ -63,19 +65,14 @@ export function createNewItem (categoryID, itemName) {
     }
 }
 
-export function updateCategoryIsOpen (categoryID, boolean) {
-    return (dispatch, getState) => {
-        let state = getState()
-        let userID = state.userSession.userID
+// export function updateCategoryIsOpen (categoryID, boolean) {
+//     return {
+//         type: "UPDATE_CATEGORY_ISOPEN",
+//         categoryID,
+//         boolean
+//     }
 
-        Fire
-            .database()
-            .ref("_USERS/" + userID + "/_CATEGORIES/" + categoryID)
-            .update(
-                {isOpen: boolean}
-            )
-    }
-}
+// }
 
 export function updateItemIsComplete (categoryID, itemID, boolean) {
     return (dispatch, getState) => {

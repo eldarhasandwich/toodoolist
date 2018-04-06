@@ -3,7 +3,6 @@ class dbHandler {
 
     newCategoryTemplate = {
         categoryName: "",
-        isOpen: true
     }
 
     newItemTemplate = {
