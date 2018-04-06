@@ -1,23 +1,15 @@
 import Fire from '../_Classes/Fire'
-import DatabaseHandler from  '../_Classes/DatabaseHandler'
+import DatabaseHandler from '../_Classes/DatabaseHandler'
 
-export function setUserID (newUserID) {
-    return {
-        type: "SET_USER_ID",
-        newUserID
-    }
+export function setUserID(newUserID) {
+    return {type: "SET_USER_ID", newUserID}
 }
 
-export function setUserList (newUserList) {
-    return {
-        type: "SET_USER_LIST",
-        newUserList
-    }
+export function setUserList(newUserList) {
+    return {type: "SET_USER_LIST", newUserList}
 }
 
-
-
-export function getUserList (userID) {
+export function getUserList(userID) {
     return (dispatch, getState) => {
 
         Fire
@@ -33,7 +25,7 @@ export function getUserList (userID) {
     }
 }
 
-export function createNewCategory (categoryName) {
+export function createNewCategory(categoryName) {
     return (dispatch, getState) => {
         let state = getState()
         let userID = state.userSession.userID
@@ -42,14 +34,12 @@ export function createNewCategory (categoryName) {
             .database()
             .ref("_USERS/" + userID + "/_CATEGORIES")
             .push()
-            .set(
-                DatabaseHandler.createNewCategory(categoryName)
-            )
+            .set(DatabaseHandler.createNewCategory(categoryName))
 
     }
 }
 
-export function createNewItem (categoryID, itemName) {
+export function createNewItem(categoryID, itemName) {
     return (dispatch, getState) => {
         let state = getState()
         let userID = state.userSession.userID
@@ -58,23 +48,16 @@ export function createNewItem (categoryID, itemName) {
             .database()
             .ref("_USERS/" + userID + "/_CATEGORIES/" + categoryID + "/_ITEMS")
             .push()
-            .set(
-                DatabaseHandler.createNewItem(itemName)
-            )
+            .set(DatabaseHandler.createNewItem(itemName))
 
     }
 }
 
-// export function updateCategoryIsOpen (categoryID, boolean) {
-//     return {
-//         type: "UPDATE_CATEGORY_ISOPEN",
-//         categoryID,
-//         boolean
-//     }
-
+// export function updateCategoryIsOpen (categoryID, boolean) {     return {
+//     type: "UPDATE_CATEGORY_ISOPEN",         categoryID,         boolean     }
 // }
 
-export function updateItemIsComplete (categoryID, itemID, boolean) {
+export function updateItemIsComplete(categoryID, itemID, boolean) {
     return (dispatch, getState) => {
         let state = getState()
         let userID = state.userSession.userID
@@ -82,8 +65,18 @@ export function updateItemIsComplete (categoryID, itemID, boolean) {
         Fire
             .database()
             .ref("_USERS/" + userID + "/_CATEGORIES/" + categoryID + "/_ITEMS/" + itemID)
-            .update(
-                {isComplete: boolean}
-            )
+            .update({isComplete: boolean})
+    }
+}
+
+export function deleteItem(categoryID, itemID) {
+    return (dispatch, getState) => {
+        let state = getState()
+        let userID = state.userSession.userID
+
+        Fire
+            .database()
+            .ref("_USERS/" + userID + "/_CATEGORIES/" + categoryID + "/_ITEMS/" + itemID)
+            .remove()
     }
 }

@@ -32,19 +32,13 @@ class Item extends Component {
             ? {textDecoration: "line-through"}
             : {}
     }
-
-    itemStyle = {
-        width: "95%",
-        margin: "5px auto",
-        padding: "1px 0"
-    }
-
+    
     handleClick = () => {
         if (this.props.userSession.userList._CATEGORIES[this.props.categoryID]._ITEMS[this.props.itemID].isComplete) {
             this.openAlert()
             return
         }
-
+        
         this.updateItemIsComplete()
     }
     
@@ -55,6 +49,20 @@ class Item extends Component {
             !this.props.userSession.userList._CATEGORIES[this.props.categoryID]._ITEMS[this.props.itemID].isComplete
         )
         this.closeAlert()
+    }
+
+    deleteItem = () => {
+        this.props.deleteItem(this.props.categoryID, this.props.itemID)
+    }
+
+    getItemStyle = () => {
+        let isComplete = this.props.userSession.userList._CATEGORIES[this.props.categoryID]._ITEMS[this.props.itemID].isComplete
+        return {
+            width: "95%",
+            margin: "5px auto",
+            padding: "1px 0",
+            backgroundColor: (isComplete) ? "#DDD" : "#FFF"
+        }
     }
 
     render() {
@@ -68,14 +76,20 @@ class Item extends Component {
             <RaisedButton
                 style={{marginLeft: "5px"}}
                 primary
-                label={"Confirm"}
+                label={"Incomplete"}
                 onClick={this.updateItemIsComplete}
-            />            
+            />,
+            <RaisedButton
+                style={{marginLeft: "5px"}}
+                secondary
+                label={"Delete"}
+                onClick={this.deleteItem}
+            />
         ]
 
 
         return (
-            <Paper style={this.itemStyle} zDepth={2}>
+            <Paper style={this.getItemStyle()} zDepth={2}>
                 <div onClick={this.handleClick}>
                     <p style={this.getTextStyle()}>
                         {this.getItemName()}
@@ -86,7 +100,7 @@ class Item extends Component {
                         open={this.state.untickAlertOpen}
                         onRequestClose={this.closeAlert}
                     >
-                        {`'${this.getItemName()}' is marked as complete, would you like to set it as incomplete?`}
+                        {`'${this.getItemName()}' is marked as complete, would you like to delete it or set it as incomplete?`}
                     </Dialog>
                 </div>
             </Paper>
@@ -100,7 +114,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        updateItemIsComplete: (catID, itemID, bool) => dispatch(UserSessionActions.updateItemIsComplete(catID, itemID, bool))
+        updateItemIsComplete: (catID, itemID, bool) => dispatch(UserSessionActions.updateItemIsComplete(catID, itemID, bool)),
+        deleteItem: (catID, itemID) => dispatch(UserSessionActions.deleteItem(catID, itemID))
     }
 }
 
