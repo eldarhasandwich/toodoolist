@@ -1,7 +1,7 @@
 const defaultState = {
     userID: null,
-    userList: {}
-
+    userList: {},
+    listIsLoading: false,
 }
 
 
@@ -22,19 +22,26 @@ const userSession = (state = defaultState, action) => {
             }            
         }
 
-        case "UPDATE_CATEGORY_ISOPEN": {
+        // case "UPDATE_CATEGORY_ISOPEN": {
+        //     return {
+        //         ...state,
+        //         userList: {
+        //             ...state.userList,
+        //             _CATEGORIES: {
+        //                 ...state.userList._CATEGORIES,
+        //                 [action.categoryID]: {
+        //                     ...state.userList._CATEGORIES[action.categoryID],
+        //                     isOpen: action.boolean
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
+        case "SET_LIST_IS_LOADING": {
             return {
                 ...state,
-                userList: {
-                    ...state.userList,
-                    _CATEGORIES: {
-                        ...state.userList._CATEGORIES,
-                        [action.categoryID]: {
-                            ...state.userList._CATEGORIES[action.categoryID],
-                            isOpen: action.boolean
-                        }
-                    }
-                }
+                listIsLoading: action.boolean
             }
         }
 

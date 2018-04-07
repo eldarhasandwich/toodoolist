@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import Category from './../Category/Category'
 
 import * as UserSessionActions from './../../Actions/userSession'
-import { RaisedButton, Dialog, TextField } from 'material-ui';
+import {RaisedButton, Dialog, TextField, Paper} from 'material-ui';
 
 class ListContainer extends Component {
 
@@ -51,7 +51,9 @@ class ListContainer extends Component {
     }
 
     createNewCategory = () => {
-        this.props.createNewCategory(this.state.newCategoryName)
+        this
+            .props
+            .createNewCategory(this.state.newCategoryName)
         this.resetNewCategoryName()
         this.closeDialog()
     }
@@ -67,41 +69,60 @@ class ListContainer extends Component {
     render() {
         return (
             <div style={this.listContainerStyle}>
-                <div style={{width:"100%", overflow:"auto"}}>
-                    <button style={{float:"left", marginLeft: "5px"}} onClick={this.getUserList}>Get List</button>
-                </div>
+
+                <Paper
+                    style={{
+                    padding: "2px 7px",
+                    marginTop: "5px",
+                    width: "95%",
+                    margin: "auto"
+                }}
+                    zdepth={2}>
+                    <p>Copy or bookmark this link to share this list with your friends or access it later</p>
+                    <h3>{window.location.href}</h3>
+                </Paper>
 
                 <h1>{this.props.userSession.userList.userName}</h1>
 
                 {/* <button onClick={this.createNewCategory}>New Category</button> */}
 
-                <div style={{width:"100%", overflow:"auto"}}>
+                <div
+                    style={{
+                    width: "100%",
+                    overflow: "auto"
+                }}>
                     <RaisedButton
-                        style={{float: "right", marginRight: "10px", marginBottom: "5px"}}
+                        style={{
+                        float: "right",
+                        marginRight: "10px",
+                        marginBottom: "5px"
+                    }}
                         label={"New Category"}
                         primary
-                        onClick={this.openDialog}
-                    />
+                        onClick={this.openDialog}/>
                 </div>
 
                 <Dialog
                     title="Create a new Category"
                     open={this.state.newCategoryDialogOpen}
-                    onRequestClose={this.closeDialog}
-                >
+                    onRequestClose={this.closeDialog}>
                     <TextField
                         floatingLabelText={"Category Name"}
                         onChange={this.setNewCategoryName}
-                        value={this.state.newCategoryName}
-                    />
+                        value={this.state.newCategoryName}/>
 
-                    <div style={{width:"100%", overflow:"auto"}}>
+                    <div
+                        style={{
+                        width: "100%",
+                        overflow: "auto"
+                    }}>
                         <RaisedButton
-                            style={{float: "right"}}
+                            style={{
+                            float: "right"
+                        }}
                             primary
                             onClick={this.createNewCategory}
-                            label={"Create Category"}
-                        />
+                            label={"Create Category"}/>
                     </div>
                 </Dialog>
 

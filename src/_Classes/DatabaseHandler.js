@@ -1,6 +1,10 @@
 
 class dbHandler {
 
+    newUserTemplate = {
+        userName: "My New List!"
+    }
+
     newCategoryTemplate = {
         categoryName: "",
     }
@@ -8,6 +12,10 @@ class dbHandler {
     newItemTemplate = {
         itemName: "",
         isComplete: false
+    }
+
+    createNewUser = () => {
+        return {...this.newUserTemplate}
     }
 
     createNewCategory = (name) => {

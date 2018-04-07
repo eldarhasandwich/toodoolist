@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import './App.css';
 import {connect} from 'react-redux'
 import ListContainer from './ListContainer/ListContainer'
+import NewListPage from './NewListPage/NewListPage'
 
 import { Paper } from 'material-ui'
  
@@ -22,11 +23,15 @@ class App extends Component {
                 <MuiThemeProvider>
                     <div>
                         <Paper style={this.headerStyle}>
-                            {/* <img src={logo} className="App-logo" alt="logo"/> */}
                             <h1 className="App-title">TooDooList - alpha</h1>
                         </Paper>
 
-                        <ListContainer/>
+                    {
+                        (this.props.userSession.userID !== null) 
+                            ? <ListContainer/>
+                            : <NewListPage/>
+                    }
+
                     </div>
                 </MuiThemeProvider>
 
