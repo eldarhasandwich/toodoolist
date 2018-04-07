@@ -2,8 +2,10 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import Item from '../Item/Item'
 
+import CreateNewItemDialog from './CreateNewItemDialog';
+
 import * as UserSessionActions from './../../Actions/userSession'
-import { RaisedButton, Dialog, TextField, Paper, Checkbox } from 'material-ui';
+import { RaisedButton, Paper, Checkbox } from 'material-ui';
 
 class Category extends Component {
 
@@ -12,7 +14,7 @@ class Category extends Component {
 
         this.state = {
             newItemDialogOpen: false,
-            newItemName: "",
+            // newItemName: "",
             categoryItemsVisible: false
         }
     }
@@ -58,29 +60,7 @@ class Category extends Component {
         return itemKeys.map(x => <Item itemID={x} categoryID={this.props.categoryID} key={this.props.categoryID + x}/>)
     }
 
-    createNewItem = () => {
-        this.props.createNewItem(this.props.categoryID, "new item")
-    }
-
-    setNewItemName = (newName) => {
-        this.setState({newItemName: newName.target.value})
-        // console.log(this.state.newItemName)
-    }
-
-    resetNewItemName = () => {
-        this.setState({newItemName: ""})
-    }
-
-    createNewItem = () => {
-        this.props.createNewItem(this.props.categoryID, this.state.newItemName)
-        this.resetNewItemName()
-        this.closeDialog()
-    }
-    
     updateCategoryIsOpen = (event, isChecked) => {
-        // console.log(isChecked)
-
-        // this.props.updateCategoryIsOpen(this.props.categoryID, isChecked)
         this.setState({categoryItemsVisible: isChecked})
     }
 
@@ -88,7 +68,7 @@ class Category extends Component {
         width: "95%",
         margin: "5px auto",
         padding: "5px 0"
-        // margin: "auto",
+
     }
 
     render() {
@@ -116,32 +96,18 @@ class Category extends Component {
                         <RaisedButton
                             style={{float: "right", marginRight: "10px", marginBottom: "5px"}}
                             label={"New Item"}
-                            disabled={!this.state.categoryItemsVisible}
+                            // disabled={!this.state.categoryItemsVisible}
                             secondary
                             onClick={this.openDialog}
                         />
                     </div>
 
-                    <Dialog
-                        title={"Create a new Item under '" + this.getCategoryName() + "'"}
-                        open={this.state.newItemDialogOpen}
+                    <CreateNewItemDialog
+                        isOpen={this.state.newItemDialogOpen}
+                        categoryID={this.props.categoryID}
+                        getCategoryName={this.getCategoryName}
                         onRequestClose={this.closeDialog}
-                    >
-                        <TextField
-                            floatingLabelText={"Item Name"}
-                            onChange={this.setNewItemName}
-                            value={this.state.newItemName}
-                        />
-
-                        <div style={{width:"100%", overflow:"auto"}}>
-                            <RaisedButton
-                                style={{float: "right"}}
-                                primary
-                                onClick={this.createNewItem}
-                                label={"Create Item"}
-                            />
-                        </div>
-                    </Dialog>
+                    />
 
                     {this.getCategoryItems()}
                 </div>

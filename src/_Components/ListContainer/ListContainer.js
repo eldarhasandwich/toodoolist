@@ -2,8 +2,13 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import Category from './../Category/Category'
 
+import EditListNameDialog from './EditListNameDialog'
+import CreateNewCatDialog from './CreateNewCatDialog'
+
+import './../../Styles/glitch.css'
+
 import * as UserSessionActions from './../../Actions/userSession'
-import {RaisedButton, Dialog, TextField, Paper} from 'material-ui';
+import {RaisedButton, Paper} from 'material-ui';
 
 class ListContainer extends Component {
 
@@ -12,16 +17,24 @@ class ListContainer extends Component {
 
         this.state = {
             newCategoryDialogOpen: false,
-            newCategoryName: ""
+            editListNameDialogOpen: false,
         }
     }
 
-    openDialog = () => {
+    openNewCategoryDialog = () => {
         this.setState({newCategoryDialogOpen: true})
     }
 
-    closeDialog = () => {
+    closeNewCategoryDialog = () => {
         this.setState({newCategoryDialogOpen: false})
+    }
+
+    openListNameDialog = () => {
+        this.setState({editListNameDialogOpen: true})
+    }
+
+    closeListNameDialog = () => {
+        this.setState({editListNameDialogOpen: false})
     }
 
     getUserList = () => {
@@ -41,22 +54,7 @@ class ListContainer extends Component {
         return categoryKeys.map(x => <Category categoryID={x} key={this.props.userSession.userID + x}/>)
     }
 
-    setNewCategoryName = (newName) => {
-        this.setState({newCategoryName: newName.target.value})
-        // console.log(this.state.newCategoryName)
-    }
 
-    resetNewCategoryName = () => {
-        this.setState({newCategoryName: ""})
-    }
-
-    createNewCategory = () => {
-        this
-            .props
-            .createNewCategory(this.state.newCategoryName)
-        this.resetNewCategoryName()
-        this.closeDialog()
-    }
 
     listContainerStyle = {
         // border: "1px solid black",
@@ -82,9 +80,17 @@ class ListContainer extends Component {
                     <h3>{window.location.href}</h3>
                 </Paper>
 
-                <h1>{this.props.userSession.userList.userName}</h1>
+                <h1 className="user-name-heading"
+                    style={{fontWeight:"normal"}}
+                    onClick={this.openListNameDialog}
+                >
+                    {this.props.userSession.userList.userName}
+                </h1>
 
-                {/* <button onClick={this.createNewCategory}>New Category</button> */}
+                <EditListNameDialog
+                    isOpen={this.state.editListNameDialogOpen}
+                    onRequestClose={this.closeListNameDialog}
+                />
 
                 <div
                     style={{
@@ -99,32 +105,13 @@ class ListContainer extends Component {
                     }}
                         label={"New Category"}
                         primary
-                        onClick={this.openDialog}/>
+                        onClick={this.openNewCategoryDialog}/>
                 </div>
 
-                <Dialog
-                    title="Create a new Category"
-                    open={this.state.newCategoryDialogOpen}
-                    onRequestClose={this.closeDialog}>
-                    <TextField
-                        floatingLabelText={"Category Name"}
-                        onChange={this.setNewCategoryName}
-                        value={this.state.newCategoryName}/>
-
-                    <div
-                        style={{
-                        width: "100%",
-                        overflow: "auto"
-                    }}>
-                        <RaisedButton
-                            style={{
-                            float: "right"
-                        }}
-                            primary
-                            onClick={this.createNewCategory}
-                            label={"Create Category"}/>
-                    </div>
-                </Dialog>
+                <CreateNewCatDialog
+                    isOpen={this.state.newCategoryDialogOpen}
+                    onRequestClose={this.closeNewCategoryDialog}
+                />
 
                 {this.getUserCategories()}
 
@@ -140,7 +127,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         getUserList: userID => dispatch(UserSessionActions.getUserList(userID)),
-        createNewCategory: categoryName => dispatch(UserSessionActions.createNewCategory(categoryName))
+        // createNewCategory: categoryName => dispatch(UserSessionActions.createNewCategory(categoryName)),
+        // updateListName: newName => dispatch(UserSessionActions.updateUserName(newName))
     }
 }
 

@@ -26,7 +26,7 @@ class NewListPage extends Component {
 
     componentWillMount() {
         let urlKey = window.location.pathname.split("/")
-        console.log(urlKey)
+        // console.log(urlKey)
 
         if (urlKey[urlKey.length-1] === "toodoolist") { // this is it get it working on github, find a better way
             urlKey.push("newList")

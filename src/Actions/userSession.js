@@ -16,6 +16,20 @@ export function setListIsLoading(boolean) {
     }
 }
 
+export function updateUserName(newName) {
+    return (dispatch, getState) => {
+
+        let state = getState()
+        let userID = state.userSession.userID
+
+        Fire
+            .database()
+            .ref("_USERS/" + userID)
+            .update({userName: newName})
+
+    }
+}
+
 export function createNewUser() {
     return (dispatch, getState) => {
 
@@ -60,7 +74,7 @@ export function getUserList(userID) {
                     return
                 }
 
-                console.log(userID)
+                // console.log(userID)
                 dispatch(setUserID(userID))
                 dispatch(setUserList(snapshot.val()))
 
@@ -100,10 +114,6 @@ export function createNewItem(categoryID, itemName) {
 
     }
 }
-
-// export function updateCategoryIsOpen (categoryID, boolean) {     return {
-//     type: "UPDATE_CATEGORY_ISOPEN",         categoryID,         boolean     }
-// }
 
 export function updateItemIsComplete(categoryID, itemID, boolean) {
     return (dispatch, getState) => {
