@@ -4,24 +4,24 @@ import {connect} from 'react-redux'
 import * as UserSessionActions from './../../Actions/userSession'
 import {RaisedButton, Dialog, TextField} from 'material-ui';
 
-class EditListNameDialog extends Component {
+class RenameCatDialog extends Component {
 
     constructor(props) {
         super(props)
 
         this.state = {
-            newListName: ""
+            newCatName: ""
         }
     }
 
-    setNewListName = (newName) => {
-        this.setState({newListName: newName.target.value})
+    setNewCatName = (newName) => {
+        this.setState({newCatName: newName.target.value})
     }
 
-    updateListName = () => {
+    updateCatName = () => {
         this
             .props
-            .updateListName(this.state.newListName)
+            .updateCategoryName(this.props.categoryID, this.state.newCatName)
         this
             .props
             .onRequestClose()
@@ -30,13 +30,15 @@ class EditListNameDialog extends Component {
     render() {
         return (
             <Dialog
-                title={`Rename '${this.props.userSession.userList.userName}'`}
+                title={`Rename '${this
+                .props
+                .getCategoryName()}'`}
                 open={this.props.isOpen}
                 onRequestClose={this.props.onRequestClose}>
                 <TextField
                     floatingLabelText={"New Name"}
-                    value={this.state.newListName}
-                    onChange={this.setNewListName}
+                    onChange={this.setNewCatName}
+                    value={this.state.newCatName}
                     fullWidth
                     multiLine/>
 
@@ -50,11 +52,11 @@ class EditListNameDialog extends Component {
                         float: "right"
                     }}
                         primary
-                        onClick={this.updateListName}
+                        onClick={this.updateCatName}
                         label={"Change Name"}/>
                 </div>
             </Dialog>
-        )
+        );
     }
 }
 
@@ -64,11 +66,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        // getUserList: userID => dispatch(UserSessionActions.getUserList(userID)),
-        // createNewCategory: categoryName =>
-        // dispatch(UserSessionActions.createNewCategory(categoryName)),
-        updateListName: newName => dispatch(UserSessionActions.updateUserName(newName))
+        updateCategoryName: (categoryID, itemName) => dispatch(UserSessionActions.updateCategoryName(categoryID, itemName))
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditListNameDialog)
+export default connect(mapStateToProps, mapDispatchToProps)(RenameCatDialog)

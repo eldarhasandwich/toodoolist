@@ -22,9 +22,9 @@ class App extends Component {
             <div className="App">
                 <MuiThemeProvider>
                     <div>
-                        <Paper style={this.headerStyle}>
-                            <h1 className="App-title">TooDooList - alpha 2</h1>
-                        </Paper>
+                        <div style={this.headerStyle}>
+                            <h1 className="App-title">TooDooList - alpha 3</h1>
+                        </div>
 
                     {
                         (this.props.userSession.userID !== null) 

@@ -1,5 +1,13 @@
 
 
+.item-paper:hover {
+    animation:glitch 2s steps(100) infinite;
+}
+
+.category-name:hover {
+    animation:glitch 2s steps(100) infinite;
+}
+
 .user-name-heading:hover {
     animation:glitch 2s steps(100) infinite;
     cursor: pointer;

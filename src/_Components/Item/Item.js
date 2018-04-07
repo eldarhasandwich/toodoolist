@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
 
+import '../../Styles/glitch.css'
+
 import * as UserSessionActions from './../../Actions/userSession'
 
 import {Paper, Dialog, RaisedButton} from 'material-ui'
@@ -27,8 +29,12 @@ class Item extends Component {
         return this.props.userSession.userList._CATEGORIES[this.props.categoryID]._ITEMS[this.props.itemID].itemName
     }
 
+    isThisItemComplete = () => {
+        return this.props.userSession.userList._CATEGORIES[this.props.categoryID]._ITEMS[this.props.itemID].isComplete
+    }
+
     getTextStyle = () => {
-        return (this.props.userSession.userList._CATEGORIES[this.props.categoryID]._ITEMS[this.props.itemID].isComplete)
+        return (this.isThisItemComplete())
             ? {
                 textDecoration: "line-through"
             }
@@ -36,7 +42,7 @@ class Item extends Component {
     }
 
     handleClick = () => {
-        if (this.props.userSession.userList._CATEGORIES[this.props.categoryID]._ITEMS[this.props.itemID].isComplete) {
+        if (this.isThisItemComplete()) {
             this.openAlert()
             return
         }
@@ -47,7 +53,7 @@ class Item extends Component {
     updateItemIsComplete = () => {
         this
             .props
-            .updateItemIsComplete(this.props.categoryID, this.props.itemID, !this.props.userSession.userList._CATEGORIES[this.props.categoryID]._ITEMS[this.props.itemID].isComplete)
+            .updateItemIsComplete(this.props.categoryID, this.props.itemID, !this.isThisItemComplete())
         this.closeAlert()
     }
 
@@ -58,12 +64,11 @@ class Item extends Component {
     }
 
     getItemStyle = () => {
-        let isComplete = this.props.userSession.userList._CATEGORIES[this.props.categoryID]._ITEMS[this.props.itemID].isComplete
         return {
             width: "100%",
             margin: "5px auto",
             padding: "1px 0",
-            backgroundColor: (isComplete)
+            backgroundColor: (this.isThisItemComplete())
                 ? "#DDD"
                 : "#FFF"
         }
@@ -93,8 +98,14 @@ class Item extends Component {
         ]
 
         return (
-            <div onClick={this.handleClick} style={{width: "95%", margin: "auto", cursor: "pointer"}}>
-                <Paper style={this.getItemStyle()} zDepth={2}>
+            <div
+                onClick={this.handleClick}
+                style={{
+                width: "95%",
+                margin: "auto",
+                cursor: "pointer"
+            }}>
+                <Paper style={this.getItemStyle()} zDepth={2} className={"item-paper"}>
                     <p style={this.getTextStyle()}>
                         {this.getItemName()}
                     </p>

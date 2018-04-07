@@ -30,6 +30,22 @@ export function updateUserName(newName) {
     }
 }
 
+export function updateCategoryName(categoryID, newName) {
+    return (dispatch, getState) => {
+        let state = getState()
+        let userID = state.userSession.userID
+
+        Fire
+            .database()
+            .ref("_USERS/" + userID + "/_CATEGORIES/" + categoryID)
+            .update(
+                {categoryName: newName}
+            )
+
+
+    }
+}
+
 export function createNewUser() {
     return (dispatch, getState) => {
 
