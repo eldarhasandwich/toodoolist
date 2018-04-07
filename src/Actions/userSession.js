@@ -28,7 +28,9 @@ export function createNewUser() {
         .getKey()
         
         console.log(newRef)
-        window.location.pathname = newRef
+        let thisPath = window.location.pathname.split("/")
+        thisPath[thisPath.length-1] = newRef
+        window.location.pathname = thisPath.join("/")
 
         Fire
             .database()

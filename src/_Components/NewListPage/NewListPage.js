@@ -25,15 +25,24 @@ class NewListPage extends Component {
     }
 
     componentWillMount() {
-        let urlKey = window.location.pathname.substring(1) 
+        let urlKey = window.location.pathname.split("/")
         console.log(urlKey)
 
-        if (urlKey === "") {
-            window.location.pathname = "newList"
+        if (urlKey[urlKey.length-1] === "toodoolist") { // this is it get it working on github, find a better way
+            urlKey.push("newList")
+
+            window.location.pathname = urlKey.join("/")
             return
         }
 
-        this.props.getUserList(urlKey)
+        if (urlKey[urlKey.length-1] === "") {
+            urlKey[urlKey.length-1] = "newList"
+
+            window.location.pathname = urlKey.join("/")
+            return
+        }
+
+        this.props.getUserList(urlKey[urlKey.length-1])
     }
 
     render() {
@@ -55,7 +64,7 @@ class NewListPage extends Component {
         return (
             <div style={this.newListPageStyle}>
 
-                <Paper style={{padding: "10px", width:"95%"}}>
+                <Paper style={{padding: "10px", width:"95%", margin: "auto"}}>
 
                     <p>Easily create and share Todo lists with your friends!</p>
 
