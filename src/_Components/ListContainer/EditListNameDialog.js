@@ -10,7 +10,8 @@ class EditListNameDialog extends Component {
         super(props)
 
         this.state = {
-            newListName: ""
+            newListName: "",
+            emptyNameErrorMsg: false
         }
     }
 
@@ -19,6 +20,18 @@ class EditListNameDialog extends Component {
     }
 
     updateListName = () => {
+        if (this.state.newListName === "") {
+            this.setState({emptyNameErrorMsg: true})
+            return
+        }
+
+        this.setState(
+            {
+                newListName: "",
+                emptyNameErrorMsg: false
+            }
+        )
+
         this
             .props
             .updateListName(this.state.newListName)
@@ -37,6 +50,7 @@ class EditListNameDialog extends Component {
                     floatingLabelText={"New Name"}
                     value={this.state.newListName}
                     onChange={this.setNewListName}
+                    errorText={(this.state.emptyNameErrorMsg) ? "Name can't be empty" : null}
                     fullWidth
                     multiLine/>
 

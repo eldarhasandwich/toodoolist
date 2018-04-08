@@ -25,24 +25,15 @@ class NewListPage extends Component {
     }
 
     componentWillMount() {
-        let urlKey = window.location.pathname.split("/")
-        // console.log(urlKey)
-
-        if (urlKey[urlKey.length-1] === "toodoolist") { // this is it get it working on github, find a better way
-            urlKey.push("newList")
-
-            window.location.pathname = urlKey.join("/")
+        let urlString = window.location.href
+        let url = new URL(urlString)
+        let listKey = url.searchParams.get("k")
+        console.log(listKey)
+        if (listKey === null) {
             return
         }
-
-        if (urlKey[urlKey.length-1] === "") {
-            urlKey[urlKey.length-1] = "newList"
-
-            window.location.pathname = urlKey.join("/")
-            return
-        }
-
-        this.props.getUserList(urlKey[urlKey.length-1])
+        
+        this.props.getUserList(listKey)
     }
 
     render() {
@@ -65,6 +56,12 @@ class NewListPage extends Component {
             <div style={this.newListPageStyle}>
 
                 <Paper style={{padding: "10px", width:"95%", margin: "auto"}}>
+
+                    {
+                        (this.props.userSession.listKeyIncorrentMsg)
+                            ? <h3>The key you are trying to use is not correct :(</h3>
+                            : null
+                    }
 
                     <p>Easily create and share Todo lists with your friends!</p>
 

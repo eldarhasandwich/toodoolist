@@ -11,7 +11,8 @@ class CreateNewItemDialog extends Component {
         super(props)
 
         this.state = {
-            newItemName: ""
+            newItemName: "",
+            emptyNameErrorMsg: false
         }
     }
 
@@ -23,7 +24,6 @@ class CreateNewItemDialog extends Component {
 
     setNewItemName = (newName) => {
         this.setState({newItemName: newName.target.value})
-        // console.log(this.state.newItemName)
     }
 
     resetNewItemName = () => {
@@ -31,44 +31,72 @@ class CreateNewItemDialog extends Component {
     }
 
     createNewItem = () => {
+        if (this.state.newItemName === "") {
+            this.setState({emptyNameErrorMsg: true})
+            return
+        }
+
+        this.setState(
+            {
+                newItemName: "",
+                emptyNameErrorMsg: false
+            }
+        )
+
         this
             .props
             .createNewItem(this.props.categoryID, this.state.newItemName)
         this.resetNewItemName()
+
+    }
+
+    createNewItemAndClose = () => {
+        this.createNewItem()
+
+        if (this.state.newItemName === "") {
+            this.setState({emptyNameErrorMsg: true})
+            return
+        }
+
         this
             .props
             .onRequestClose()
     }
 
     render() {
-        return (
 
+        const actions = [
+            <RaisedButton
+                secondary
+                onClick={this.createNewItem}
+                label={"Add Item + Create New"}
+                style = {{marginLeft: "5px", marginTop: "5px"}}
+            />,
+
+            <RaisedButton
+                primary
+                onClick={this.createNewItemAndClose}
+                label={"Add Item"}
+                style = {{marginLeft: "5px", marginTop: "5px"}}
+            />
+        ]
+
+        return (
             <Dialog
                 title={`Create a new Item under '${this
                 .props
                 .getCategoryName()}'`}
                 open={this.props.isOpen}
-                onRequestClose={this.props.onRequestClose}>
+                onRequestClose={this.props.onRequestClose}
+                actions={actions}>
                 <TextField
+                    ref={"itemNameField"}
                     floatingLabelText={"Item"}
                     onChange={this.setNewItemName}
                     value={this.state.newItemName}
+                    errorText={(this.state.emptyNameErrorMsg) ? "Name can't be empty" : null}
                     fullWidth
                     multiLine/>
-
-                <div
-                    style={{
-                    width: "100%",
-                    overflow: "auto"
-                }}>
-                    <RaisedButton
-                        style={{
-                        float: "right"
-                    }}
-                        primary
-                        onClick={this.createNewItem}
-                        label={"Create Item"}/>
-                </div>
             </Dialog>
 
         );

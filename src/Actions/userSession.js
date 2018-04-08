@@ -10,11 +10,15 @@ export function setUserList(newUserList) {
 }
 
 export function setListIsLoading(boolean) {
-    return {
-        type: "SET_LIST_IS_LOADING",
-        boolean
-    }
+    return {type: "SET_LIST_IS_LOADING", boolean}
 }
+
+export function setListKeyIsIncorrectMsg(boolean) {
+    return {type: "SET_LISTKEY_INCORRECT_MSG", boolean}
+}
+
+
+//FIREBASE CALLS
 
 export function updateUserName(newName) {
     return (dispatch, getState) => {
@@ -38,10 +42,7 @@ export function updateCategoryName(categoryID, newName) {
         Fire
             .database()
             .ref("_USERS/" + userID + "/_CATEGORIES/" + categoryID)
-            .update(
-                {categoryName: newName}
-            )
-
+            .update({categoryName: newName})
 
     }
 }
@@ -52,24 +53,23 @@ export function createNewUser() {
         console.log("Creating new user")
 
         let newRef = Fire
-        .database()
-        .ref("_USERS")
-        .push()
-        .getKey()
-        
-        console.log(newRef)
-        let thisPath = window.location.pathname.split("/")
-        thisPath[thisPath.length-1] = newRef
-        window.location.pathname = thisPath.join("/")
+            .database()
+            .ref("_USERS")
+            .push()
+            .getKey()
 
         Fire
             .database()
             .ref("_USERS")
             .child(newRef)
-            .set(DatabaseHandler.createNewUser(), function (error){
-                if (!error) {
-                    dispatch(getUserList(newRef))
-                }
+            .set(DatabaseHandler.createNewUser())
+            .then(() => {
+                // console.log("new user")
+
+                // console.log(newRef)
+                var params = new URLSearchParams(window.location.search);
+                params.set('k', newRef);
+                window.location.search = params.toString();
             })
 
     }
@@ -86,11 +86,13 @@ export function getUserList(userID) {
             .on("value", function (snapshot) {
                 if (snapshot.val() === null) {
                     console.log(`userID "${userID}" does not exist`)
+                    dispatch(setListKeyIsIncorrectMsg(true))
                     dispatch(setListIsLoading(false))
+                    // window.history.replaceState(null, null, window.location.pathname);
                     return
                 }
 
-                // console.log(userID)
+                dispatch(setListKeyIsIncorrectMsg(false))
                 dispatch(setUserID(userID))
                 dispatch(setUserList(snapshot.val()))
 

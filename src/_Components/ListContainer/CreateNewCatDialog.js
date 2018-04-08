@@ -13,7 +13,8 @@ class CreateNewCatDialog extends Component {
         super(props)
 
         this.state = {
-            newCategoryName: ""
+            newCategoryName: "",
+            emptyNameErrorMsg: false
         }
     }
 
@@ -26,6 +27,18 @@ class CreateNewCatDialog extends Component {
     }
 
     createNewCategory = () => {
+        if (this.state.newCategoryName === "") {
+            this.setState({emptyNameErrorMsg: true})
+            return
+        }
+
+        this.setState(
+            {
+                newCategoryName: "",
+                emptyNameErrorMsg: false
+            }
+        )
+
         this
             .props
             .createNewCategory(this.state.newCategoryName)
@@ -44,6 +57,7 @@ class CreateNewCatDialog extends Component {
                         floatingLabelText={"Category Name"}
                         onChange={this.setNewCategoryName}
                         value={this.state.newCategoryName}
+                        errorText={(this.state.emptyNameErrorMsg) ? "Name can't be empty" : null}
                         fullWidth
                         multiLine    
                     />

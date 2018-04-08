@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux'
 
 import '../../Styles/glitch.css'
+// import '../../Styles/Animate.css'
 
 import * as UserSessionActions from './../../Actions/userSession'
 
@@ -25,12 +26,24 @@ class Item extends Component {
         this.setState({untickAlertOpen: false})
     }
 
+    getItem = () => {
+        return this.props.userSession.userList._CATEGORIES[this.props.categoryID]._ITEMS[this.props.itemID]
+    }
+
     getItemName = () => {
-        return this.props.userSession.userList._CATEGORIES[this.props.categoryID]._ITEMS[this.props.itemID].itemName
+        let thisItem = this.getItem()
+        if (thisItem === undefined || thisItem === null) {
+            return "none"
+        }
+        return thisItem.itemName
     }
 
     isThisItemComplete = () => {
-        return this.props.userSession.userList._CATEGORIES[this.props.categoryID]._ITEMS[this.props.itemID].isComplete
+        let thisItem = this.getItem()
+        if (thisItem === undefined || thisItem === null) {
+            return false
+        }
+        return thisItem.isComplete
     }
 
     getTextStyle = () => {
@@ -105,7 +118,12 @@ class Item extends Component {
                 margin: "auto",
                 cursor: "pointer"
             }}>
-                <Paper style={this.getItemStyle()} zDepth={2} className={"item-paper"}>
+                <Paper
+                    style={this.getItemStyle()}
+                    zDepth={(this.isThisItemComplete())
+                    ? 1
+                    : 2}
+                    id={"item-paper"}>
                     <p style={this.getTextStyle()}>
                         {this.getItemName()}
                     </p>

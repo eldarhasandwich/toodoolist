@@ -1,6 +1,6 @@
 
 
-.item-paper:hover {
+#item-paper:hover {
     animation:glitch 2s steps(100) infinite;
 }
 

@@ -3,12 +3,18 @@ import {connect} from 'react-redux'
 import Item from '../Item/Item'
 
 import '../../Styles/glitch.css'
+// import './styles.css'
 
 import CreateNewItemDialog from './CreateNewItemDialog';
 import RenameCatDialog from './RenameCatDialog';
 
 import * as UserSessionActions from './../../Actions/userSession'
 import {RaisedButton, Paper, Checkbox} from 'material-ui';
+
+import {
+    CSSTransition,
+    TransitionGroup,
+  } from 'react-transition-group';
 
 class Category extends Component {
 
@@ -71,10 +77,14 @@ class Category extends Component {
         }
 
         let itemKeys = Object.keys(items)
-        return itemKeys.map(x => <Item
-            itemID={x}
-            categoryID={this.props.categoryID}
-            key={this.props.categoryID + x}/>)
+        return itemKeys.map(x => 
+
+                <Item
+                    itemID={x}
+                    categoryID={this.props.categoryID}
+                    key={this.props.categoryID + x}
+                />
+        )
     }
 
     updateCategoryIsOpen = (event, isChecked) => {
@@ -84,15 +94,16 @@ class Category extends Component {
     categoryStyle = {
         width: "95%",
         margin: "5px auto",
-        padding: "5px 0"
-
+        padding: "5px 0",
     }
 
     render() {
         return (
             <Paper style={this.categoryStyle} zDepth={2}>
 
-                <div>
+                <div/> 
+
+                <div style={{clear: "both"}}>
 
                     <div
                         style={{
@@ -154,7 +165,11 @@ class Category extends Component {
                         isOpen={this.state.newItemDialogOpen}
                         categoryID={this.props.categoryID}
                         getCategoryName={this.getCategoryName}
-                        onRequestClose={this.closeNewItemDialog}/> {this.getCategoryItems()}
+                        onRequestClose={this.closeNewItemDialog}/> 
+                        
+                    
+                        {this.getCategoryItems()}
+
                 </div>
 
             </Paper>

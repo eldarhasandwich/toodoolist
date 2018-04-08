@@ -10,7 +10,8 @@ class RenameCatDialog extends Component {
         super(props)
 
         this.state = {
-            newCatName: ""
+            newCatName: "",
+            emptyNameErrorMsg: false
         }
     }
 
@@ -19,6 +20,18 @@ class RenameCatDialog extends Component {
     }
 
     updateCatName = () => {
+        if (this.state.newCatName === "") {
+            this.setState({emptyNameErrorMsg: true})
+            return
+        }
+
+        this.setState(
+            {
+                newCatName: "",
+                emptyNameErrorMsg: false
+            }
+        )
+
         this
             .props
             .updateCategoryName(this.props.categoryID, this.state.newCatName)
@@ -39,6 +52,7 @@ class RenameCatDialog extends Component {
                     floatingLabelText={"New Name"}
                     onChange={this.setNewCatName}
                     value={this.state.newCatName}
+                    errorText={(this.state.emptyNameErrorMsg) ? "Name can't be empty" : null}
                     fullWidth
                     multiLine/>
 
