@@ -71,6 +71,10 @@ class Category extends Component {
             return "#557CFF"
         }
 
+        if (frac === 0.5) {
+            return "#FF0"
+        }
+
         if (frac < 0.5) {
             let g = ((frac*2)*256)
             g = Math.ceil(g).toString(16)
@@ -83,7 +87,6 @@ class Category extends Component {
             return `#${r}ff00`
         }
         
-
     } 
 
     getCategoryItems = () => {
@@ -121,13 +124,13 @@ class Category extends Component {
 
                 <LinearProgress
                     mode="determinate"
-                    value={(itemCompletion.complete/itemCompletion.total)*100}
+                    value={(itemCompletion === null) ? 0 : (itemCompletion.complete/itemCompletion.total)*100}
                     style={{
                         height: "7px",
                         width: "98%",
                         margin: "auto"
                     }}
-                    color={this.getPercentBarColor(itemCompletion.complete, itemCompletion.total)}/>
+                    color={(itemCompletion === null) ? "#F00" : this.getPercentBarColor(itemCompletion.complete, itemCompletion.total)}/>
 
                 <div style={{
                     clear: "both"
@@ -166,7 +169,7 @@ class Category extends Component {
                         }}
                             className={"category-name"}
                             onClick={this.openChangeNameDialog}>
-                            {`${this.getCategoryName()} - (${itemCompletion.complete}/${itemCompletion.total})`}
+                            {`${this.getCategoryName()} - (${(itemCompletion === null) ? "Nothing!" : itemCompletion.complete + "/" + itemCompletion.total})`}
                         </h3>
                     </div>
 

@@ -23,7 +23,7 @@ class App extends Component {
                 <MuiThemeProvider>
                     <div>
                         <div style={this.headerStyle}>
-                            <h1 className="App-title">TooDooList - alpha 7</h1>
+                            <h1 className="App-title">TooDooList - alpha 7.2</h1>
                         </div>
 
                     {
