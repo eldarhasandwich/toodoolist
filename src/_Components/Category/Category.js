@@ -9,12 +9,7 @@ import CreateNewItemDialog from './CreateNewItemDialog';
 import RenameCatDialog from './RenameCatDialog';
 
 import * as UserSessionActions from './../../Actions/userSession'
-import {RaisedButton, Paper, Checkbox} from 'material-ui';
-
-import {
-    CSSTransition,
-    TransitionGroup,
-  } from 'react-transition-group';
+import {RaisedButton, Paper, Checkbox, LinearProgress} from 'material-ui';
 
 class Category extends Component {
 
@@ -48,6 +43,23 @@ class Category extends Component {
         return this.props.userSession.userList._CATEGORIES[this.props.categoryID].categoryName
     }
 
+    getCompletedItemPercent = () => {
+        let items = this.props.userSession.userList._CATEGORIES[this.props.categoryID]._ITEMS
+        if (items === undefined || items === null) {
+            return 0
+        }
+
+        let completedItems = Object
+            .keys(items)
+            .filter(x => items[x].isComplete)
+            .length
+
+        let totalItems = Object
+            .keys(items)
+            .length
+        return (completedItems / totalItems) * 100
+    }
+
     getCompletedItemCount = () => {
         let items = this.props.userSession.userList._CATEGORIES[this.props.categoryID]._ITEMS
         if (items === undefined || items === null) {
@@ -77,14 +89,10 @@ class Category extends Component {
         }
 
         let itemKeys = Object.keys(items)
-        return itemKeys.map(x => 
-
-                <Item
-                    itemID={x}
-                    categoryID={this.props.categoryID}
-                    key={this.props.categoryID + x}
-                />
-        )
+        return itemKeys.map(x => <Item
+            itemID={x}
+            categoryID={this.props.categoryID}
+            key={this.props.categoryID + x}/>)
     }
 
     updateCategoryIsOpen = (event, isChecked) => {
@@ -94,16 +102,26 @@ class Category extends Component {
     categoryStyle = {
         width: "95%",
         margin: "5px auto",
-        padding: "5px 0",
+        padding: "5px 0"
     }
 
     render() {
         return (
             <Paper style={this.categoryStyle} zDepth={2}>
 
-                <div/> 
+                <LinearProgress
+                    mode="determinate"
+                    value={this.getCompletedItemPercent()}
+                    style={{
+                        height: "7px",
+                        width: "98%",
+                        margin: "auto"
+                    }}
+                    color={(this.getCompletedItemPercent() === 100) ? "#1F1" : "#F33"}/>
 
-                <div style={{clear: "both"}}>
+                <div style={{
+                    clear: "both"
+                }}>
 
                     <div
                         style={{
@@ -117,14 +135,18 @@ class Category extends Component {
                             label={"Show Items"}
                             style={{
                             textAlign: "left",
-                            float:"left",
-                            width:"160px"
+                            float: "left",
+                            width: "160px"
                         }}
                             checked={this.state.categoryItemsVisible}
                             onCheck={this.updateCategoryIsOpen}/>
                     </div>
 
-                    <div style={{width:"100%", overflow:"auto"}}>
+                    <div
+                        style={{
+                        width: "100%",
+                        overflow: "auto"
+                    }}>
                         <h3
                             style={{
                             marginBottom: "3px",
@@ -142,8 +164,7 @@ class Category extends Component {
                         isOpen={this.state.changeCatNameDialogOpen}
                         categoryID={this.props.categoryID}
                         getCategoryName={this.getCategoryName}
-                        onRequestClose={this.closeChangeNameDialog}
-                    />
+                        onRequestClose={this.closeChangeNameDialog}/>
 
                     <div
                         style={{
@@ -165,10 +186,7 @@ class Category extends Component {
                         isOpen={this.state.newItemDialogOpen}
                         categoryID={this.props.categoryID}
                         getCategoryName={this.getCategoryName}
-                        onRequestClose={this.closeNewItemDialog}/> 
-                        
-                    
-                        {this.getCategoryItems()}
+                        onRequestClose={this.closeNewItemDialog}/> {this.getCategoryItems()}
 
                 </div>
 

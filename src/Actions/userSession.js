@@ -145,6 +145,18 @@ export function updateItemIsComplete(categoryID, itemID, boolean) {
     }
 }
 
+export function deleteCategory(categoryID) {
+    return (dispatch, getState) => {
+        let state = getState()
+        let userID = state.userSession.userID
+
+        Fire
+            .database()
+            .ref("_USERS/" + userID + "/_CATEGORIES/" + categoryID)
+            .remove()
+    }
+}
+
 export function deleteItem(categoryID, itemID) {
     return (dispatch, getState) => {
         let state = getState()

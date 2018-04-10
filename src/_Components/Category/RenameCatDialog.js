@@ -15,8 +15,30 @@ class RenameCatDialog extends Component {
         }
     }
 
+    canDeleteCategory = () => {
+        let items = this.props.userSession.userList._CATEGORIES[this.props.categoryID]._ITEMS
+        if (items === undefined || items === null) {
+            return true
+        }
+
+        let incompleteItems = Object
+            .keys(items)
+            .filter(x => !items[x].isComplete)
+            .length
+
+        if (incompleteItems > 0) {
+            return false
+        }
+
+        return true
+    }
+
     setNewCatName = (newName) => {
         this.setState({newCatName: newName.target.value})
+    }
+
+    deleteCategory = () => {
+        this.props.deleteCategory(this.props.categoryID)
     }
 
     updateCatName = () => {
@@ -41,13 +63,29 @@ class RenameCatDialog extends Component {
     }
 
     render() {
+
+        const dialogActions = [
+            <RaisedButton
+                disabled={!this.canDeleteCategory()}
+                secondary
+                onClick={this.deleteCategory}
+                label={"Delete"}
+                style = {{marginLeft: "5px", marginTop: "5px"}}/>,
+            <RaisedButton
+                primary
+                onClick={this.updateCatName}
+                label={"Change Name"}
+                style = {{marginLeft: "5px", marginTop: "5px"}}/>
+        ]
+
         return (
             <Dialog
-                title={`Rename '${this
+                title={`Rename or Delete '${this
                 .props
                 .getCategoryName()}'`}
                 open={this.props.isOpen}
-                onRequestClose={this.props.onRequestClose}>
+                onRequestClose={this.props.onRequestClose}
+                actions={dialogActions}>
                 <TextField
                     floatingLabelText={"New Name"}
                     onChange={this.setNewCatName}
@@ -55,20 +93,7 @@ class RenameCatDialog extends Component {
                     errorText={(this.state.emptyNameErrorMsg) ? "Name can't be empty" : null}
                     fullWidth
                     multiLine/>
-
-                <div
-                    style={{
-                    width: "100%",
-                    overflow: "auto"
-                }}>
-                    <RaisedButton
-                        style={{
-                        float: "right"
-                    }}
-                        primary
-                        onClick={this.updateCatName}
-                        label={"Change Name"}/>
-                </div>
+                <p>The Category must be empty or all Items must be complete to be able to delete it.</p>
             </Dialog>
         );
     }
@@ -80,7 +105,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        updateCategoryName: (categoryID, itemName) => dispatch(UserSessionActions.updateCategoryName(categoryID, itemName))
+        updateCategoryName: (categoryID, itemName) => dispatch(UserSessionActions.updateCategoryName(categoryID, itemName)),
+        deleteCategory: (catID) => dispatch(UserSessionActions.deleteCategory(catID))
     }
 }
 
