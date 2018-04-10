@@ -5,7 +5,7 @@ import {connect} from 'react-redux'
 import ListContainer from './ListContainer/ListContainer'
 import NewListPage from './NewListPage/NewListPage'
 
-import { Paper } from 'material-ui'
+// import { Paper } from 'material-ui'
  
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
@@ -23,7 +23,7 @@ class App extends Component {
                 <MuiThemeProvider>
                     <div>
                         <div style={this.headerStyle}>
-                            <h1 className="App-title">TooDooList - alpha 6</h1>
+                            <h1 className="App-title">TooDooList - alpha 7</h1>
                         </div>
 
                     {

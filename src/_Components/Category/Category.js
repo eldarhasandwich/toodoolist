@@ -43,10 +43,10 @@ class Category extends Component {
         return this.props.userSession.userList._CATEGORIES[this.props.categoryID].categoryName
     }
 
-    getCompletedItemPercent = () => {
+    getItemCompletedTotal = () => {
         let items = this.props.userSession.userList._CATEGORIES[this.props.categoryID]._ITEMS
         if (items === undefined || items === null) {
-            return 0
+            return null
         }
 
         let completedItems = Object
@@ -57,25 +57,34 @@ class Category extends Component {
         let totalItems = Object
             .keys(items)
             .length
-        return (completedItems / totalItems) * 100
+
+        return {
+            complete: completedItems,
+            total: totalItems
+        }
     }
 
-    getCompletedItemCount = () => {
-        let items = this.props.userSession.userList._CATEGORIES[this.props.categoryID]._ITEMS
-        if (items === undefined || items === null) {
-            return "Nothing!"
+    getPercentBarColor = (numer, denom) => {
+        let frac = numer / denom
+
+        if (frac === 1) {
+            return "#557CFF"
         }
 
-        let completedItems = Object
-            .keys(items)
-            .filter(x => items[x].isComplete)
-            .length
+        if (frac < 0.5) {
+            let g = ((frac*2)*256)
+            g = Math.ceil(g).toString(16)
+            console.log(`#ff${g}00`)
+            return `#ff${g}00`
+        } else {
+            let r = 256 - (((frac-0.5)*2)*256)
+            r = Math.ceil(r).toString(16)
+            console.log(`#${r}ff00`)
+            return `#${r}ff00`
+        }
+        
 
-        let totalItems = Object
-            .keys(items)
-            .length
-        return `(${completedItems}/${totalItems})`
-    }
+    } 
 
     getCategoryItems = () => {
         if (!this.state.categoryItemsVisible) {
@@ -106,18 +115,19 @@ class Category extends Component {
     }
 
     render() {
+        let itemCompletion = this.getItemCompletedTotal()
         return (
             <Paper style={this.categoryStyle} zDepth={2}>
 
                 <LinearProgress
                     mode="determinate"
-                    value={this.getCompletedItemPercent()}
+                    value={(itemCompletion.complete/itemCompletion.total)*100}
                     style={{
                         height: "7px",
                         width: "98%",
                         margin: "auto"
                     }}
-                    color={(this.getCompletedItemPercent() === 100) ? "#1F1" : "#F33"}/>
+                    color={this.getPercentBarColor(itemCompletion.complete, itemCompletion.total)}/>
 
                 <div style={{
                     clear: "both"
@@ -156,7 +166,7 @@ class Category extends Component {
                         }}
                             className={"category-name"}
                             onClick={this.openChangeNameDialog}>
-                            {this.getCategoryName() + " - " + this.getCompletedItemCount()}
+                            {`${this.getCategoryName()} - (${itemCompletion.complete}/${itemCompletion.total})`}
                         </h3>
                     </div>
 
